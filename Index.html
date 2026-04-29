@@ -299,14 +299,18 @@
           localStorage.setItem(THEME_KEY, nextTheme);
         });
 
-        // Fallback simples caso a imagem ativa não carregue.
+        const goToMainDirectly = () => {
+          main.setAttribute('data-ready', 'true');
+          splash.classList.add('hide');
+        };
+
+        // Se a imagem ativa não carregar, pula a splash direto.
         const handleLogoError = (event) => {
           if (event.currentTarget !== getActiveLogo()) {
             return;
           }
 
-          event.currentTarget.style.display = 'none';
-          fallback.style.display = 'grid';
+          goToMainDirectly();
         };
 
         logoDark.addEventListener('error', handleLogoError);
@@ -326,8 +330,7 @@
           // Segurança: se o evento não disparar por algum motivo.
           setTimeout(() => {
             if (!splash.classList.contains('hide')) {
-              main.setAttribute('data-ready', 'true');
-              splash.classList.add('hide');
+              goToMainDirectly();
             }
           }, GLOW_MS + 120);
         }, { once: true });
